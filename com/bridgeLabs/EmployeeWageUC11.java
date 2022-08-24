@@ -1,34 +1,37 @@
 package com.bridgeLabs;
 
-import java.util.Scanner;
+import java.util.*;
 
-public class EmployeeWageUC8 {
-
+public class EmployeeWageUC11 {
     private static final int FULL_DAY_HOUR = 8;
     private static final int PART_TIME_HOUR = 4;
     private static final int EMP_IS_FULL_TIME = 1;
     private static final int EMP_IS_PART_TIME = 2;
     private static Scanner sc ;
+    private static EmployeeWageBuilder1 C_wage_cal = new EmployeeWageBuilder1();
 
     public static void main(String[] args) {
 
         int EMP_WAGE_PER_HOUR;
         int DAYS_PER_MONTH;
         int TOTAL_WORKING_HOURS_PER_MONTH;
+        int EmpTotalWage_C;
+        CompanyEmpWage companyEmpWage=null;
 
         sc = new Scanner(System.in);
         System.out.println("How many companies employee wage you want to calculate");
         int c = sc.nextInt();
         for(int i = 1 ;i <= c;i++){
 
+
             Company company = setCompany();
             EMP_WAGE_PER_HOUR =company.getEmpWagePerHour();
             DAYS_PER_MONTH = company.getDaysPerMonth();
             TOTAL_WORKING_HOURS_PER_MONTH = company.getTotalWorkingHoursPerMonth();
 
+
             int empWorkingDays = 0 ;
             int empWorkingHoursPerMonth = 0;
-            int monthlySalary = 0;
             int salary = 0;
 
             while(empWorkingDays<DAYS_PER_MONTH && empWorkingHoursPerMonth != TOTAL_WORKING_HOURS_PER_MONTH){
@@ -39,33 +42,45 @@ public class EmployeeWageUC8 {
                         salary = computeEmpWage(FULL_DAY_HOUR,EMP_WAGE_PER_HOUR);
                         empWorkingHoursPerMonth += FULL_DAY_HOUR;
                         empWorkingDays++;
-                        monthlySalary += salary;
                         break;
                     case EMP_IS_PART_TIME:
                         System.out.println("Employee is present part time!");
                         salary = computeEmpWage(PART_TIME_HOUR,EMP_WAGE_PER_HOUR);
                         empWorkingHoursPerMonth += PART_TIME_HOUR;
                         empWorkingDays++;
-                        monthlySalary += salary;
                         break;
                     default:
                         salary = computeEmpWage(0,EMP_WAGE_PER_HOUR);
                         empWorkingHoursPerMonth += 0;
                         empWorkingDays++;
-                        monthlySalary += salary;
                         System.out.println("Employee is absent!");
                         break;
                 }
                 System.out.println("Day "+empWorkingDays+" salary is "+salary);
                 System.out.println("------------------------------------------");
             }
-            company.setEmpTotalWage(monthlySalary);
+
+
+            EmpTotalWage_C = C_wage_cal.calculateEmpWage(empWorkingHoursPerMonth,EMP_WAGE_PER_HOUR,company);
+            company.setEmpTotalWage(EmpTotalWage_C);
             company.setEmpTotalWorkingHours(empWorkingHoursPerMonth);
+
             System.out.println("Company "+i+" Employee Total working hours in month is "+company.getEmpTotalWorkingHours());
             System.out.println("Company "+i+" Employee has monthly salary is : "+company.getEmpTotalWage());
+            System.out.println("--------------------------------------------------------------------------");
+        }
+
+        Map<Integer,Integer> list = C_wage_cal.C_EmpWage;
+        Set<Integer> keySet = list.keySet();
+        for(Integer key: keySet){
+            System.out.println("Company : "+key+" Company Employee Wage is "+list.get(key));
         }
         System.out.println("See you again!!");
+    }
 
+    private static int EmpWageBuilder(int empWorkingHoursPerMonth, int emp_wage_per_hour)
+    {
+        return  emp_wage_per_hour *empWorkingHoursPerMonth;
     }
 
     private static Company setCompany() {
