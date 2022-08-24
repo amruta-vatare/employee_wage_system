@@ -1,10 +1,17 @@
 package com.bridgeLabs;
 
 public class Company {
+    public static int getCompanyID() {
+        return companyID;
+    }
+
+
+
+    private static int companyID = 0;
     private static int EMP_WAGE_PER_HOUR;
     private static int DAYS_PER_MONTH;
     private static int TOTAL_WORKING_HOURS_PER_MONTH;
-
+    private int empTotalWage;
     private int empTotalWorkingHours;
 
     public int getEmpTotalWorkingHours() {
@@ -15,17 +22,14 @@ public class Company {
         this.empTotalWorkingHours = empTotalWorkingHours;
     }
 
-    public int getEmpMonthlySalary() {
-        return empMonthlySalary;
-    }
+    public int getEmpTotalWage() { return empTotalWage;}
 
-    public void setEmpMonthlySalary(int empMonthlySalary) {
-        this.empMonthlySalary = empMonthlySalary;
+    public void setEmpTotalWage(int empTotalWage) {
+        this.empTotalWage = empTotalWage;
     }
-
-    private int empMonthlySalary;
 
     public Company(int emp_wage_per_hour, int days_per_month, int total_working_hours_per_month) {
+        companyID++;
         EMP_WAGE_PER_HOUR = emp_wage_per_hour;
         DAYS_PER_MONTH = days_per_month;
         TOTAL_WORKING_HOURS_PER_MONTH = total_working_hours_per_month;
